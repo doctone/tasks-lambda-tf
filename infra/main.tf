@@ -30,7 +30,7 @@ data "archive_file" "lambda_hello_world" {
   type = "zip"
 
   source_dir  = "${path.module}/../backend/dist"
-  output_path = "${path.module}/lambda-function.zip" # Save the ZIP locally inside infra
+  output_path = "${path.module}/lambda-function.zip" 
 
 }
 

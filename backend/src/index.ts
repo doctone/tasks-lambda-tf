@@ -1,7 +1,4 @@
-import AWS from 'aws-sdk'
-
-const dynamo = new AWS.DynamoDB.DocumentClient()
-
+import { scan } from "./ddClient";
 
 export const handler = async (event) => {
   const tableName = process.env.TABLE_NAME;
@@ -12,14 +9,14 @@ export const handler = async (event) => {
         message: "Error reading from DynamoDB",
         error: "Table name not defined",
       }),
-    }; // Table name from environment variables
+    };
 
   try {
     const params = {
       TableName: tableName,
     };
 
-    const data = await dynamo.scan(params).promise();
+    const data = await scan(params);
 
     return {
       statusCode: 200,
@@ -35,8 +32,8 @@ export const handler = async (event) => {
       statusCode: 500,
       body: JSON.stringify({
         message: "Error reading from DynamoDB",
-        error: error.message,
+        error: JSON.stringify(error),
       }),
     };
   }
-}
+};
