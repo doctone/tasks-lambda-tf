@@ -1,10 +1,20 @@
+const mockItems: Record<string, unknown>[] = [];
+
+export const setMockItems = (
+  {
+    items,
+  }: {
+    items: Record<string, unknown>[];
+  } = { items: [] }
+) => {
+  mockItems.length = 0;
+  mockItems.push(...items);
+};
+
 export const taskTableRepository = {
   scan: async () => {
     return {
-      Items: [
-        { id: 1, name: "task1" },
-        { id: 2, name: "task2" },
-      ],
+      Items: mockItems,
     };
   },
 };
