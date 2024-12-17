@@ -1,8 +1,10 @@
 import type { APIGatewayEvent } from "aws-lambda";
-import { handler, lambdaHandler } from ".";
-import { setMockItems } from "../database/__mocks__/Table";
+import { lambdaHandler } from ".";
+import { TableSpy } from "dynamodb-toolbox/table/actions/spy";
+import { taskTable } from "../database/Table";
+import { ScanCommand } from "dynamodb-toolbox";
 
-vi.mock("../database/Table");
+const tableSpy = taskTable.build(TableSpy);
 
 describe("lambda", () => {
   it("should return 200", async () => {
@@ -10,17 +12,15 @@ describe("lambda", () => {
       { id: 1, name: "task1" },
       { id: 2, name: "task2" },
     ];
-    setMockItems({ items: mockItems });
+
+    tableSpy.on(ScanCommand).resolve({ Items: mockItems });
     const result = await lambdaHandler({
       body: "this is an event",
     } as APIGatewayEvent);
     expect(result.statusCode).toBe(200);
     expect(JSON.parse(result.body)).toEqual({
       message: "Successfully read from DynamoDB",
-      data: [
-        { id: 1, name: "task1" },
-        { id: 2, name: "task2" },
-      ],
+      data: mockItems,
     });
   });
 });
