@@ -1,6 +1,7 @@
 import { scan } from "./ddClient";
+import type { APIGatewayEvent } from "aws-lambda";
 
-export const handler = async (event) => {
+export const handler = async (event: APIGatewayEvent) => {
   const tableName = process.env.TABLE_NAME;
   if (!tableName)
     return {
@@ -11,29 +12,29 @@ export const handler = async (event) => {
       }),
     };
 
-  try {
-    const params = {
-      TableName: tableName,
-    };
+  const params = {
+    TableName: tableName,
+  };
 
-    const data = await scan(params);
+  const res = await scan(params);
+  const data = res.map((items) => items);
 
-    return {
-      statusCode: 200,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message: "Successfully read from DynamoDB",
-        data: data.Items,
-      }),
-    };
-  } catch (error) {
-    console.error("Error reading from DynamoDB:", error);
+  if (data.isErr()) {
     return {
       statusCode: 500,
       body: JSON.stringify({
         message: "Error reading from DynamoDB",
-        error: JSON.stringify(error),
+        error: data.error,
       }),
     };
   }
+
+  return {
+    statusCode: 200,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message: "Successfully read from DynamoDB",
+      data: data.value.Items,
+    }),
+  };
 };

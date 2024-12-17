@@ -11,6 +11,8 @@ crash.log
 infra/.terraform/
 infra/terraform.tfstate
 infra/terraform.tfstate.backup
+**/terraform.tfstate
+**/terraform.tfstate.backup
 
 # Build artifacts
 *.zip
