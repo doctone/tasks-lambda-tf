@@ -16,3 +16,6 @@ infra/terraform.tfstate.backup
 
 # Build artifacts
 *.zip
+
+# Local development files
+coverage
