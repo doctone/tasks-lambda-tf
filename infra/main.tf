@@ -71,18 +71,18 @@ resource "aws_cloudwatch_log_group" "hello_world" {
 }
 
 resource "aws_dynamodb_table" "tasks" {
-  name         = "tasks-table"
+  name         = "Tasks"
   billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "task"
-  range_key    = "timestamp"
+  hash_key     = "pk"
+  range_key    = "sk"
 
   attribute {
-    name = "task"
+    name = "pk"
     type = "S"
   }
   attribute {
-    name = "timestamp"
-    type = "N"
+    name = "sk"
+    type = "S"
   }
 }
 

@@ -14,8 +14,10 @@
   "author": "sam james",
   "license": "ISC",
   "dependencies": {
+    "@aws-lambda-powertools/logger": "^2.12.0",
     "@aws-sdk/client-dynamodb": "^3.712.0",
     "@aws-sdk/lib-dynamodb": "^3.713.0",
+    "@middy/core": "^6.0.0",
     "@types/node": "^22.10.2",
     "@vitest/coverage-istanbul": "^2.1.8",
     "aws-sdk": "^2.1692.0",

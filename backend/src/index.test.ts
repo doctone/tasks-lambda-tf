@@ -1,6 +1,5 @@
 import type { APIGatewayEvent } from "aws-lambda";
-import { handler } from ".";
-import { taskTableRepository } from "../database/Table";
+import { handler, lambdaHandler } from ".";
 import { setMockItems } from "../database/__mocks__/Table";
 
 vi.mock("../database/Table");
@@ -12,7 +11,7 @@ describe("lambda", () => {
       { id: 2, name: "task2" },
     ];
     setMockItems({ items: mockItems });
-    const result = await handler({
+    const result = await lambdaHandler({
       body: "this is an event",
     } as APIGatewayEvent);
     expect(result.statusCode).toBe(200);

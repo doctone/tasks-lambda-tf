@@ -5,7 +5,7 @@ import { Table, TableRepository } from "dynamodb-toolbox";
 const dynamoDBClient = new DynamoDBClient();
 
 export const documentClient = DynamoDBDocumentClient.from(
-  process.env.NODE_ENV === "PRODUCTION"
+  process.env.NODE_ENV !== "test"
     ? dynamoDBClient
     : new DynamoDBClient({
         endpoint: process.env.LOCAL_DYNAMO_ADDRESS,
