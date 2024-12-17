@@ -1,20 +1,11 @@
-import AWS from "aws-sdk";
-import { DocumentClient } from "aws-sdk/clients/dynamodb";
-import { ok, err, ResultAsync } from "neverthrow";
+import { ResultAsync } from "neverthrow";
+import { taskTableRepository } from "../database/Table";
 
-const dynamo = new AWS.DynamoDB.DocumentClient();
+export const scan = () => {
+  const tablePromise = taskTableRepository.scan();
 
-export const scan = ({
-  TableName,
-}: {
-  TableName: string;
-}): ResultAsync<DocumentClient.ScanOutput, Error> => {
   return ResultAsync.fromPromise(
-    dynamo
-      .scan({
-        TableName,
-      })
-      .promise(),
+    tablePromise,
     () => new Error("Failed to scan table")
   );
 };
