@@ -2,28 +2,26 @@ provider "aws" {
   region = "us-east-1"
 }
 
-
-resource "random_pet" "lambda_bucket_name" {
-  prefix = "tasks-lambda"
-  length = 4
+module "lambda_s3_bucket" {
+  source        = "./modules/storage"
+  bucket_prefix = "tasks-lambda"
 }
+module "tasks_table" {
+  source       = "./modules/data"
+  name         = "Tasks"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "pk"
+  range_key    = "sk"
 
-resource "aws_s3_bucket" "lambda_bucket" {
-  bucket = random_pet.lambda_bucket_name.id
-}
+  attributes = [
+    { name = "pk", type = "S" },
+    { name = "sk", type = "S" }
+  ]
 
-resource "aws_s3_bucket_ownership_controls" "lambda_bucket" {
-  bucket = aws_s3_bucket.lambda_bucket.id
-  rule {
-    object_ownership = "BucketOwnerPreferred"
+  tags = {
+    Environment = "dev"
+    Project     = "task-manager"
   }
-}
-
-resource "aws_s3_bucket_acl" "lambda_bucket" {
-  depends_on = [aws_s3_bucket_ownership_controls.lambda_bucket]
-
-  bucket = aws_s3_bucket.lambda_bucket.id
-  acl    = "private"
 }
 
 data "archive_file" "lambda_hello_world" {
@@ -36,7 +34,7 @@ data "archive_file" "lambda_hello_world" {
 
 
 resource "aws_s3_object" "lambda_hello_world" {
-  bucket = aws_s3_bucket.lambda_bucket.id
+  bucket = module.lambda_s3_bucket.bucket_name
 
   key    = "index.zip"
   source = data.archive_file.lambda_hello_world.output_path
@@ -49,7 +47,7 @@ resource "aws_lambda_function" "hello_world" {
   role          = aws_iam_role.lambda_role.arn
 
 
-  s3_bucket = aws_s3_bucket.lambda_bucket.id
+  s3_bucket = module.lambda_s3_bucket.bucket_name
   s3_key    = aws_s3_object.lambda_hello_world.key
 
   runtime = "nodejs20.x"
@@ -58,7 +56,7 @@ resource "aws_lambda_function" "hello_world" {
   source_code_hash = data.archive_file.lambda_hello_world.output_base64sha256
   environment {
     variables = {
-      TABLE_NAME = aws_dynamodb_table.tasks.name
+      TABLE_NAME = module.tasks_table.table_name
     }
   }
 
@@ -68,22 +66,6 @@ resource "aws_cloudwatch_log_group" "hello_world" {
   name = "/aws/lambda/${aws_lambda_function.hello_world.function_name}"
 
   retention_in_days = 30
-}
-
-resource "aws_dynamodb_table" "tasks" {
-  name         = "Tasks"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "pk"
-  range_key    = "sk"
-
-  attribute {
-    name = "pk"
-    type = "S"
-  }
-  attribute {
-    name = "sk"
-    type = "S"
-  }
 }
 
 resource "aws_iam_role" "lambda_role" {
@@ -117,7 +99,7 @@ resource "aws_iam_role_policy" "lambda_dynamodb_policy" {
           "dynamodb:Scan"
         ],
         Effect   = "Allow",
-        Resource = aws_dynamodb_table.tasks.arn
+        Resource = module.tasks_table.table_arn
       }
     ]
   })
