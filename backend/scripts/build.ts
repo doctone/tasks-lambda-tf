@@ -14,7 +14,7 @@ const distDir: string = path.resolve(__dirname, "../dist"); // Output directory
 const getEntryPoints = (dir: string): string[] => {
   return fs
     .readdirSync(dir)
-    .filter((file) => file.endsWith(".ts"))
+    .filter((file) => file.endsWith(".ts") && file.includes("test") === false)
     .map((file) => path.join(dir, file));
 };
 
