@@ -1,7 +1,7 @@
 import type { APIGatewayEvent } from "aws-lambda";
-import { lambdaHandler } from ".";
+import { lambdaHandler } from "./scan";
 import { TableSpy } from "dynamodb-toolbox/table/actions/spy";
-import { taskTable } from "../database/Table";
+import { taskTable } from "../../database/Table";
 import { ScanCommand } from "dynamodb-toolbox";
 
 const tableSpy = taskTable.build(TableSpy);

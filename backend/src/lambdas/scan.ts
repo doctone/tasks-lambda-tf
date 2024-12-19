@@ -1,4 +1,4 @@
-import { scan } from "./ddClient";
+import { scan } from "../ddClient";
 import type { APIGatewayEvent } from "aws-lambda";
 import { Logger } from "@aws-lambda-powertools/logger";
 import { injectLambdaContext } from "@aws-lambda-powertools/logger/middleware";

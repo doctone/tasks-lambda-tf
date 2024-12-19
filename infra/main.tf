@@ -70,8 +70,8 @@ module "scan" {
   bucket_name    = module.lambda_s3_bucket.bucket_name
   zip_key        = "index.zip"
   table_name     = module.tasks_table.table_name
-  source_dir     = "${path.module}/../backend/dist"
-  output_path    = "${path.module}/../../lambda-function.zip"
+  source_dir     = "${path.module}/../backend/dist/scan"
+  output_path    = "${path.module}/../../scan.zip"
 
   policy = {
     Version = "2012-10-17",
