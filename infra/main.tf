@@ -24,26 +24,15 @@ module "tasks_table" {
   }
 }
 
-module "scan" {
-  source         = "./modules/lambda"
-  function_name  = "Scan"
-  handler        = "index.handler"
-  exec_role_name = "scan-exec-role"
-  bucket_name    = module.lambda_s3_bucket.bucket_name
-  zip_key        = "index.zip"
-  s3_bucket_name = module.lambda_s3_bucket.bucket_name
-  table_name     = module.tasks_table.table_name
-  table_arn      = module.tasks_table.table_arn
-}
 
 
-resource "aws_apigatewayv2_api" "lambda" {
+resource "aws_apigatewayv2_api" "tasks" {
   name          = "serverless_lambda_gw"
   protocol_type = "HTTP"
 }
 
-resource "aws_apigatewayv2_stage" "lambda" {
-  api_id = aws_apigatewayv2_api.lambda.id
+resource "aws_apigatewayv2_stage" "tasks" {
+  api_id = aws_apigatewayv2_api.tasks.id
 
   name        = "serverless_lambda_stage"
   auto_deploy = true
@@ -67,17 +56,45 @@ resource "aws_apigatewayv2_stage" "lambda" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "api_gw" {
+  name = "/aws/api_gw/${aws_apigatewayv2_api.tasks.name}"
+
+  retention_in_days = 30
+}
+
+module "scan" {
+  source         = "./modules/lambda"
+  function_name  = "Scan"
+  handler        = "index.handler"
+  exec_role_name = "scan-exec-role"
+  bucket_name    = module.lambda_s3_bucket.bucket_name
+  zip_key        = "index.zip"
+  table_name     = module.tasks_table.table_name
+  source_dir     = "${path.module}/../backend/dist"
+  output_path    = "${path.module}/../../lambda-function.zip"
+
+  policy = {
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:Query",
+          "dynamodb:Scan"
+        ],
+        Effect   = "Allow",
+        Resource = module.tasks_table.table_arn
+      }
+    ]
+  }
+}
+
 module "scan_route" {
   source               = "./modules/api"
-  api_id               = aws_apigatewayv2_api.lambda.id
-  api_execution_arn    = aws_apigatewayv2_api.lambda.execution_arn
+  api_id               = aws_apigatewayv2_api.tasks.id
+  api_execution_arn    = aws_apigatewayv2_api.tasks.execution_arn
   lambda_invoke_arn    = module.scan.invoke_arn
   lambda_function_name = module.scan.function_name
   route_key            = "GET /scan"
 }
 
-resource "aws_cloudwatch_log_group" "api_gw" {
-  name = "/aws/api_gw/${aws_apigatewayv2_api.lambda.name}"
-
-  retention_in_days = 30
-}

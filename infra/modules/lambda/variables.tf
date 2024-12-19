@@ -1,15 +1,5 @@
-variable "s3_bucket_name" {
-  description = "The name of the S3 bucket."
-  type        = string
-}
-
 variable "table_name" {
   description = "The name of the DynamoDB table."
-  type        = string
-}
-
-variable "table_arn" {
-  description = "The ARN of the DynamoDB table."
   type        = string
 }
 
@@ -38,3 +28,24 @@ variable "zip_key" {
   type        = string
 }
 
+variable "policy" {
+  description = "The policy for the Lambda."
+  type = object({
+    Version = string
+    Statement = list(object({
+      Effect   = string
+      Action   = list(string)
+      Resource = string
+    }))
+  })
+}
+
+variable "output_path" {
+  description = "The path to the output."
+  type        = string
+}
+
+variable "source_dir" {
+  description = "The source directory."
+  type        = string
+}
