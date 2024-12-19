@@ -24,108 +24,18 @@ module "tasks_table" {
   }
 }
 
-data "archive_file" "lambda_hello_world" {
-  type = "zip"
-
-  source_dir  = "${path.module}/../backend/dist"
-  output_path = "${path.module}/lambda-function.zip"
-
+module "scan" {
+  source         = "./modules/lambda"
+  function_name  = "Scan"
+  handler        = "index.handler"
+  exec_role_name = "scan-exec-role"
+  bucket_name    = module.lambda_s3_bucket.bucket_name
+  zip_key        = "index.zip"
+  s3_bucket_name = module.lambda_s3_bucket.bucket_name
+  table_name     = module.tasks_table.table_name
+  table_arn      = module.tasks_table.table_arn
 }
 
-
-resource "aws_s3_object" "lambda_hello_world" {
-  bucket = module.lambda_s3_bucket.bucket_name
-
-  key    = "index.zip"
-  source = data.archive_file.lambda_hello_world.output_path
-
-  etag = filemd5(data.archive_file.lambda_hello_world.output_path)
-}
-
-resource "aws_lambda_function" "hello_world" {
-  function_name = "HelloWorld"
-  role          = aws_iam_role.lambda_role.arn
-
-
-  s3_bucket = module.lambda_s3_bucket.bucket_name
-  s3_key    = aws_s3_object.lambda_hello_world.key
-
-  runtime = "nodejs20.x"
-  handler = "index.handler"
-
-  source_code_hash = data.archive_file.lambda_hello_world.output_base64sha256
-  environment {
-    variables = {
-      TABLE_NAME = module.tasks_table.table_name
-    }
-  }
-
-}
-
-resource "aws_cloudwatch_log_group" "hello_world" {
-  name = "/aws/lambda/${aws_lambda_function.hello_world.function_name}"
-
-  retention_in_days = 30
-}
-
-resource "aws_iam_role" "lambda_role" {
-  name = "lambda_dynamodb_role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Action = "sts:AssumeRole",
-        Effect = "Allow",
-        Principal = {
-          Service = "lambda.amazonaws.com"
-        }
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy" "lambda_dynamodb_policy" {
-  name = "lambda_dynamodb_policy"
-  role = aws_iam_role.lambda_role.id
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Action = [
-          "dynamodb:GetItem",
-          "dynamodb:Query",
-          "dynamodb:Scan"
-        ],
-        Effect   = "Allow",
-        Resource = module.tasks_table.table_arn
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role" "lambda_exec" {
-  name = "serverless_lambda"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Sid    = ""
-      Principal = {
-        Service = "lambda.amazonaws.com"
-      }
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "lambda_policy" {
-  role       = aws_iam_role.lambda_exec.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
 
 resource "aws_apigatewayv2_api" "lambda" {
   name          = "serverless_lambda_gw"
@@ -157,13 +67,13 @@ resource "aws_apigatewayv2_stage" "lambda" {
   }
 }
 
-module "hello_world_route" {
+module "scan_route" {
   source               = "./modules/api"
   api_id               = aws_apigatewayv2_api.lambda.id
   api_execution_arn    = aws_apigatewayv2_api.lambda.execution_arn
-  lambda_invoke_arn    = aws_lambda_function.hello_world.invoke_arn
-  lambda_function_name = aws_lambda_function.hello_world.function_name
-  route_key            = "GET /hello"
+  lambda_invoke_arn    = module.scan.invoke_arn
+  lambda_function_name = module.scan.function_name
+  route_key            = "GET /scan"
 }
 
 resource "aws_cloudwatch_log_group" "api_gw" {
