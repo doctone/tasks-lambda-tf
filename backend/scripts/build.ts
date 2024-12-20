@@ -6,11 +6,9 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Directories
-const srcDir: string = path.resolve(__dirname, "../src/lambdas"); // Input source directory
-const distDir: string = path.resolve(__dirname, "../dist"); // Output directory
+const srcDir: string = path.resolve(__dirname, "../src/lambdas");
+const distDir: string = path.resolve(__dirname, "../dist");
 
-// Helper to find all .ts files in the source directory
 const getEntryPoints = (dir: string): string[] => {
   return fs
     .readdirSync(dir)
@@ -18,7 +16,6 @@ const getEntryPoints = (dir: string): string[] => {
     .map((file) => path.join(dir, file));
 };
 
-// Build each entry file into its own output directory
 const build = async () => {
   const entryPoints: string[] = getEntryPoints(srcDir);
 
@@ -28,19 +25,19 @@ const build = async () => {
   }
 
   for (const entryPoint of entryPoints) {
-    const fileName: string = path.parse(entryPoint).name; // Get the base name (e.g., 'get' from 'get.ts')
-    const outputDir: string = path.join(distDir, fileName); // e.g., dist/get
+    const fileName: string = path.parse(entryPoint).name;
+    const outputDir: string = path.join(distDir, fileName);
 
     try {
       await esbuild.build({
         entryPoints: [entryPoint],
         bundle: true,
         platform: "node",
-        target: "node20", // Adjust Node.js target
-        outfile: path.join(outputDir, "index.js"), // lambdas/get/index.js
+        target: "node20",
+        outfile: path.join(outputDir, "index.js"),
         sourcemap: true,
         minify: true,
-        format: "cjs", // Ensure CommonJS output
+        format: "cjs",
       });
 
       console.log(`✅ Built: ${entryPoint} -> ${outputDir}/index.js`);
@@ -51,5 +48,4 @@ const build = async () => {
   }
 };
 
-// Run the build
 build();

@@ -7,9 +7,8 @@ const taskSchema = schema({
   status: number().default(1),
 });
 
-export const TaskEntity = () =>
-  new Entity({
-    name: "Task",
-    table: taskTable,
-    schema: taskSchema,
-  });
+export const TaskEntity = new Entity({
+  name: "Task",
+  table: taskTable,
+  schema: taskSchema,
+});

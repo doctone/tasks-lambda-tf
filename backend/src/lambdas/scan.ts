@@ -4,7 +4,7 @@ import { Logger } from "@aws-lambda-powertools/logger";
 import { injectLambdaContext } from "@aws-lambda-powertools/logger/middleware";
 import middy from "@middy/core";
 
-const logger = new Logger({ serviceName: "serverlessAirline" });
+const logger = new Logger({ serviceName: "scanTasksHandler" });
 
 export const lambdaHandler = async (event: APIGatewayEvent) => {
   const res = await scan();

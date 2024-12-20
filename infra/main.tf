@@ -98,3 +98,40 @@ module "scan_route" {
   route_key            = "GET /scan"
 }
 
+module "create_lambda" {
+  source         = "./modules/lambda"
+  function_name  = "Create"
+  handler        = "index.handler"
+  exec_role_name = "create-exec-role"
+  bucket_name    = module.lambda_s3_bucket.bucket_name
+  zip_key        = "create.zip"
+  table_name     = module.tasks_table.table_name
+  source_dir     = "${path.module}/../backend/dist/create"
+  output_path    = "${path.module}/../../create.zip"
+
+  policy = {
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:Query",
+          "dynamodb:Scan",
+          "dynamodb:PutItem"
+        ],
+        Effect   = "Allow",
+        Resource = module.tasks_table.table_arn
+      }
+    ]
+  }
+}
+
+module "create_route" {
+  source               = "./modules/api"
+  api_id               = aws_apigatewayv2_api.tasks.id
+  api_execution_arn    = aws_apigatewayv2_api.tasks.execution_arn
+  lambda_invoke_arn    = module.create_lambda.invoke_arn
+  lambda_function_name = module.create_lambda.function_name
+  route_key            = "PUT /create"
+}
+
