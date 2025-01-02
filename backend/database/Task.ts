@@ -4,7 +4,7 @@ import { taskTable } from "./Table";
 const taskSchema = schema({
   pk: string().key(),
   sk: string().key(),
-  status: number().default(1),
+  status: string(),
 });
 
 export const TaskEntity = new Entity({
