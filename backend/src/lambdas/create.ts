@@ -5,12 +5,7 @@ import { Logger } from "@aws-lambda-powertools/logger";
 import { parser } from "@aws-lambda-powertools/parser/middleware";
 import { taskSchema, type Task } from "../schemas/task";
 import type { Context } from "aws-lambda";
-import {
-  ApiGatewayEnvelope,
-  ApiGatewayV2Envelope,
-} from "@aws-lambda-powertools/parser/envelopes";
-import { TaskEntity } from "../../database/Task";
-import { PutItemCommand } from "dynamodb-toolbox";
+import { ApiGatewayEnvelope } from "@aws-lambda-powertools/parser/envelopes";
 
 const logger = new Logger({ serviceName: "createTaskHandler" });
 
