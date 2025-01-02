@@ -11,16 +11,25 @@ export const scan = async () => {
   );
 };
 
-export const post = async () => {
+export const post = async ({
+  pk,
+  sk,
+  status,
+}: {
+  pk: string;
+  sk: string;
+  status: string;
+}) => {
   const createPromise = TaskEntity.build(PutItemCommand)
     .item({
-      pk: "my first ever task",
-      sk: "User#SamJ",
+      pk,
+      sk,
+      status,
     })
     .send();
 
   return ResultAsync.fromPromise(
     createPromise,
-    () => new Error("Failed to scan table")
+    () => new Error("Failed to create task")
   );
 };
