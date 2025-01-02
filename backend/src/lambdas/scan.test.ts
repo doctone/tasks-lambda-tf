@@ -22,5 +22,14 @@ describe("lambda", () => {
       message: "Successfully read from DynamoDB",
       data: mockItems,
     });
+  })
+  it('should return 500 if the scan fails', async () => {
+    tableSpy.on(ScanCommand).reject(new Error('fail'))
+    const result = await lambdaHandler({
+      body: "this is an event",
+    } as APIGatewayEvent);
+
+    expect(result.statusCode).toBe(500)
+
   });
 });

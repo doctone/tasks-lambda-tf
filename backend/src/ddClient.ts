@@ -11,7 +11,7 @@ export const scan = async () => {
   );
 };
 
-export const post = async ({
+export const put = async ({
   pk,
   sk,
   status,
