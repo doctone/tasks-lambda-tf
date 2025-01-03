@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 export function Nav() {
   return (
     <nav className="flex items-center justify-between dark:bg-gray-800 p-4">
@@ -23,7 +25,11 @@ export function Nav() {
           </svg>
         </button>
       </div>
-      <h1 className="text-white text-xl font-semibold">My Tasks</h1>
+      <Link to="/">
+        <h1 className="text-white text-xl font-semibold">
+          Keeping your house a home
+        </h1>
+      </Link>
     </nav>
   );
 }
