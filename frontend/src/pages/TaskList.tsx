@@ -18,10 +18,6 @@ export function TaskList() {
     );
   }
   return tasks.map((task) => (
-    <TaskCard
-      key={task.sk}
-      task={task.pk}
-      status={task.status.toLowerCase() as any}
-    />
+    <TaskCard key={task.sk} task={task.pk} status="completed" />
   ));
 }

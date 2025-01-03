@@ -5,7 +5,7 @@
   "description": "Manage your tasks",
   "main": "index.js",
   "scripts": {
-    "lint": "tsc",
+    "lint": "tsc --noEmit",
     "build": "tsx scripts/build.ts",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",

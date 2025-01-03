@@ -1,0 +1,22 @@
+{
+  "name": "task-manager",
+  "version": "1.0.0",
+  "description": "This task manager app is built using a serverless archiecture with AWS lamda, Dynamo DB for storage, and terraform for IaC",
+  "packageManager": "npm@8.5.0",
+  "workspaces": [
+    "frontend",
+    "backend",
+    "infra"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doctone/tasks-lambda-tf.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/doctone/tasks-lambda-tf/issues"
+  },
+  "homepage": "https://github.com/doctone/tasks-lambda-tf#readme"
+}
