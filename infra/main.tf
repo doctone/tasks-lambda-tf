@@ -29,6 +29,10 @@ module "tasks_table" {
 resource "aws_apigatewayv2_api" "tasks" {
   name          = "serverless_lambda_gw"
   protocol_type = "HTTP"
+  cors_configuration {
+    allow_methods = ["GET", "PUT"]
+    allow_origins = ["*"]
+  }
 }
 
 resource "aws_apigatewayv2_stage" "tasks" {

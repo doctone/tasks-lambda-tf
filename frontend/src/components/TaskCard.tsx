@@ -3,6 +3,7 @@ type Status = "pending" | "completed" | "in progress" | "not started";
 const statusColors = {
   pending: "bg-yellow-500",
   completed: "bg-green-500",
+  complete: "bg-green-500",
   "in progress": "bg-blue-500",
   "not started": "bg-red-500",
 };

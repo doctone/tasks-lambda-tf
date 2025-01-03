@@ -19,16 +19,16 @@ export const lambdaHandler = async (event: APIGatewayEvent) => {
       }),
     };
   }
-  const data = res.value.Items?.map((items) => items) ?? [];
+  const tasks = res.value.Items?.map((items) => items) ?? [];
 
-  logger.info("Successfully read from DynamoDB", { data });
+  logger.info("Successfully read from DynamoDB", { tasks });
 
   return {
     statusCode: 200,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       message: "Successfully read from DynamoDB",
-      data,
+      tasks,
     }),
   };
 };
