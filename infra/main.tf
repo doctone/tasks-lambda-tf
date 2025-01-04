@@ -1,6 +1,14 @@
 provider "aws" {
   region = "us-east-1"
 }
+terraform {
+  backend "s3" {
+    bucket         = "task-manager-tf-state"
+    key            = "tf-state"
+    region         = "us-east-1"
+    dynamodb_table = "terraform-state-lock" # Enables state locking
+  }
+}
 
 module "lambda_s3_bucket" {
   source        = "./modules/storage"
