@@ -5,6 +5,7 @@ This task manager app is built using a serverless archiecture with AWS lamda, Dy
 # Tools
 
 ## Backend
+
 - `dynamodb-toolbox` for database modelling ( and testing )
 - `neverthrow` for handling response types and error states
 - `aws-powertools` and `middy` for enhanced logging and lambda middleware
@@ -12,5 +13,6 @@ This task manager app is built using a serverless archiecture with AWS lamda, Dy
 - `vitest` as the testing framework
 
 ## Frontend
-- `React` with (Vite)[vite.dev]
-- (Tailwind)[tailwindui.com]
+
+- `React` with [Vite](vite.dev)
+- [Tailwind](tailwindui.com)
