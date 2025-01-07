@@ -1,3 +1,4 @@
+import { Home } from "react-feather";
 import { Link } from "react-router";
 
 export function Nav() {
@@ -26,9 +27,12 @@ export function Nav() {
         </button>
       </div>
       <Link to="/">
-        <h1 className="dark:text-white text-xl font-semibold">
-          Keeping your house a home
-        </h1>
+        <div className="flex items-center gap-3">
+          <Home />
+          <h1 className="dark:text-white text-l font-semibold">
+            Keep your house a home
+          </h1>
+        </div>
       </Link>
     </nav>
   );
