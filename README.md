@@ -12,5 +12,5 @@ This task manager app is built using a serverless archiecture with AWS lamda, Dy
 - `vitest` as the testing framework
 
 ## Frontend
-- `React` with (vite.dev)[vite]
-- (https://tailwindui.com/)[Tailwind]
+- `React` with (Vite)[vite.dev]
+- (Tailwind)[tailwindui.com]
