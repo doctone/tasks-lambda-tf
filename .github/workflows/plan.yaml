@@ -19,23 +19,22 @@ jobs:
         working-directory: ./infra
 
     steps:
-    # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
 
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'  # Adjust this to your project's Node.js version
+        node-version: '20'
 
     - name: Install dependencies
-      run: npm ci  # or yarn install, depending on your package manager
+      run: npm i  
       working-directory: ${{ github.workspace }}
 
     - name: Build assets
       run: npx turbo run build
       working-directory: ${{ github.workspace }}
-     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration.
+
     - name: Install Terraform
       run: |
         wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
