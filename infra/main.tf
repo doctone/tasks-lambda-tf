@@ -116,10 +116,10 @@ module "create_lambda" {
   handler        = "index.handler"
   exec_role_name = "create-exec-role"
   bucket_name    = module.lambda_s3_bucket.bucket_name
-  zip_key        = "create.zip"
+  zip_key        = "upsert.zip"
   table_name     = module.tasks_table.table_name
-  source_dir     = "${path.module}/../backend/dist/create"
-  output_path    = "${path.module}/../../create.zip"
+  source_dir     = "${path.module}/../backend/dist/upsert"
+  output_path    = "${path.module}/../../upsert.zip"
 
   policy = {
     Version = "2012-10-17",
