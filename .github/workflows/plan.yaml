@@ -28,11 +28,17 @@ jobs:
         node-version: '20'
 
     - name: Install dependencies
-      run: npm i --workspace=backend  
+      run: npm i 
       working-directory: ${{ github.workspace }}
 
     - name: Build assets
       run: npx turbo run build
+      working-directory: ${{ github.workspace }}
+
+    - name: Debug - Print dist contents
+      run: |
+        echo "Contents of dist directory:"
+        ls -R backend/dist
       working-directory: ${{ github.workspace }}
 
     - name: Install Terraform
