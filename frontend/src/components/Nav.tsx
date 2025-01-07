@@ -26,7 +26,7 @@ export function Nav() {
         </button>
       </div>
       <Link to="/">
-        <h1 className="text-white text-xl font-semibold">
+        <h1 className="dark:text-white text-xl font-semibold">
           Keeping your house a home
         </h1>
       </Link>

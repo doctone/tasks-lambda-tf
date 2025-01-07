@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "deploy": "aws s3 sync dist/ s3://www-task-manager-com",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
