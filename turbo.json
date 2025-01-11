@@ -4,6 +4,10 @@
     "build": {
       "outputs": ["dist/**"]
     },
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": ["coverage/**"]
+    },
     "tf:plan": {
       "dependsOn": ["lint", "build"],
       "cache": false
