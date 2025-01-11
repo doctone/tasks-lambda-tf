@@ -12,6 +12,9 @@ type Todo = {
 };
 
 export function TaskList() {
+  const { data } = useQuery({ queryKey: ["tasks"], queryFn: getTasks });
+  console.log(data);
+
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState("");
 
@@ -80,7 +83,6 @@ export function TaskList() {
       </div>
     </div>
   );
-  const { data } = useQuery({ queryKey: ["tasks"], queryFn: getTasks });
   const tasks = data?.data?.tasks ?? [];
   if (tasks.length === 0) {
     return (
