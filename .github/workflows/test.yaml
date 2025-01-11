@@ -25,5 +25,7 @@ jobs:
 
       - name: Install dependencies
         run: npm i
+        working-directory: frontend
+
       - name: Execute tests
         run: npx turbo test --filter=frontend
