@@ -16,3 +16,19 @@ This task manager app is built using a serverless archiecture with AWS lamda, Dy
 
 - `React` with [Vite](vite.dev)
 - [Tailwind](tailwindui.com)
+
+## Setup
+
+`npm install`
+`turbo run build`
+
+## Local
+
+Currently the infrastructure is configured for AWS and there is no local alternative
+
+To apply the infrastructure, simply apply the terraform configuration from within the `infra` directory
+
+In order to send the built assets to s3 in order for cloudfront to serve them run:
+`turbo deploy`
+
+The app sill now be accessible from the cloudfront domain name, displayed in the terraform output.
