@@ -1,6 +1,6 @@
 import { ResultAsync } from "neverthrow";
 import { taskTableRepository } from "../database/Table";
-import { PutItemCommand } from "dynamodb-toolbox";
+import { DeleteItemCommand, PutItemCommand } from "dynamodb-toolbox";
 import { TaskEntity } from "../database/Task";
 
 export const scan = async () => {
@@ -33,3 +33,8 @@ export const put = async ({
     () => new Error("Failed to create task")
   );
 };
+
+export const deleteTask = async ({ pk, sk }: { pk: string, sk: string }) => {
+  const deletePromise = TaskEntity.build(DeleteItemCommand).key({ pk, sk }).send()
+  return ResultAsync.fromPromise(deletePromise, () => new Error("failed to delete item"))
+}

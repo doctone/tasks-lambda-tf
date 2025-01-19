@@ -114,7 +114,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return unsubscribe;
   }, []);
 
-  //If loading for the first time when visiting the page
   if (isAuthLoading) return <div>Loading...</div>;
 
   return (

@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import App from "./App";
 import { BrowserRouter } from "react-router";
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 
 describe("App", () => {
   const cardTitles = [
@@ -16,9 +17,11 @@ describe("App", () => {
   ];
   it.each(cardTitles)(`should render %s successfully`, (title) => {
     render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ChakraProvider value={defaultSystem}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ChakraProvider>
     );
 
     expect(screen.getByText(title)).toBeTruthy();
