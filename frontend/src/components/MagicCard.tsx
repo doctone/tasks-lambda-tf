@@ -1,4 +1,4 @@
-import { Card, CardBody, CardRoot } from "@chakra-ui/react";
+import { CardBody, CardRoot } from "@chakra-ui/react";
 import { useState } from "react";
 import { Icon } from "react-feather";
 import { Link } from "react-router";
