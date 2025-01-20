@@ -6,7 +6,7 @@ import {
   Box,
   TrendingUp,
 } from "react-feather";
-import { SectionCard } from "./components/SectionCard";
+import MagicCard from "./components/MagicCard";
 
 const sections = [
   {
@@ -83,21 +83,15 @@ const sections = [
 
 function App() {
   return (
-    <div className="flex justify-center flex-wrap text-slate-500">
+    <div className="flex justify-center flex-wrap text-slate-500 gap-2 m-5">
       {sections.map((section) => (
-        <SectionCard
-          key={section.title}
+        <MagicCard
           Icon={section.icon}
-          iconColor={section.iconColor}
           title={section.title}
+          iconColor={section.iconColor}
           href={section.href}
-        >
-          {section.description.map((line, index) => (
-            <h4 key={index} className="text-xs">
-              {line}
-            </h4>
-          ))}
-        </SectionCard>
+          descriptions={section.description}
+        />
       ))}
     </div>
   );

@@ -25,7 +25,7 @@ export const SignIn = () => {
   });
 
   const signIn = async (data: FormValues) => {
-    await fireBaseSignIn({ ...data, displayName: "test" });
+    await fireBaseSignIn(data);
   };
 
   return (

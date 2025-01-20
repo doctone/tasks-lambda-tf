@@ -5,7 +5,6 @@ import { taskTable } from "../../database/Table";
 import { ScanCommand } from "dynamodb-toolbox";
 
 const tableSpy = taskTable.build(TableSpy);
-
 describe("lambda", () => {
   it("should return 200", async () => {
     const mockItems = [
@@ -20,16 +19,15 @@ describe("lambda", () => {
     expect(result.statusCode).toBe(200);
     expect(JSON.parse(result.body)).toEqual({
       message: "Successfully read from DynamoDB",
-      data: mockItems,
+      tasks: mockItems,
     });
-  })
-  it('should return 500 if the scan fails', async () => {
-    tableSpy.on(ScanCommand).reject(new Error('fail'))
+  });
+  it("should return 500 if the scan fails", async () => {
+    tableSpy.on(ScanCommand).reject(new Error("fail"));
     const result = await lambdaHandler({
       body: "this is an event",
     } as APIGatewayEvent);
 
-    expect(result.statusCode).toBe(500)
-
+    expect(result.statusCode).toBe(500);
   });
 });

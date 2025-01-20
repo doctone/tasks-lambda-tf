@@ -1,8 +1,5 @@
-import { TableSpy } from "dynamodb-toolbox/table/actions/spy";
-import { taskTable } from "../../database/Table";
 import { handler, upsertHandler } from "./upsert";
 import type { Context } from "aws-lambda";
-import { PutCommand } from "@aws-sdk/lib-dynamodb";
 import type { APIGatewayProxyEvent } from "@aws-lambda-powertools/parser/types";
 import * as ddClient from "../ddClient";
 

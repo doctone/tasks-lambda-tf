@@ -11,13 +11,11 @@ import { firebaseAuth } from "../firebase";
 export interface LoginFormValues {
   email: string;
   password: string;
-  displayName: string;
 }
 
 export interface UserFormValues {
   email: string;
   password: string;
-  displayName: string;
 }
 //required if you want to keep logged in after user exits the browser or closes tab
 setPersistence(firebaseAuth, browserLocalPersistence);
