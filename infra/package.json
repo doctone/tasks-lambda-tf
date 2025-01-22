@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "tf:plan": "terraform plan"
+    "tf:plan": "terraform plan",
+    "deploy": "terraform apply"
   },
   "keywords": [],
   "author": "",

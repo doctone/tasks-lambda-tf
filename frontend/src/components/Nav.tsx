@@ -29,9 +29,6 @@ export function Nav() {
       <Link to="/">
         <div className="flex items-center gap-3">
           <Home />
-          <h1 className="dark:text-white text-l font-semibold">
-            Keep your house a home
-          </h1>
         </div>
       </Link>
     </nav>

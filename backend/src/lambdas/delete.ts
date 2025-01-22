@@ -1,21 +1,30 @@
 import middy from "@middy/core";
-import type { Context } from "vm";
 import { deleteTask } from "../ddClient";
+import type { APIGatewayEvent } from "aws-lambda";
+import { z } from "zod";
+import { parser } from "@aws-lambda-powertools/parser/middleware";
 
-const deleteHandler = async (event) => {
-  const deleteResult = await deleteTask({ pk: event.pk, sk: event.sk })
+const eventSchema = z.object({
+  pk: z.string(),
+  sk: z.string(),
+});
+
+const deleteHandler = async (event: z.infer<typeof eventSchema>) => {
+  const deleteResult = await deleteTask({ pk: event.pk, sk: event.sk });
 
   if (deleteResult.isErr()) {
     return {
       statusCode: 500,
-      message: 'Failed to delete'
-    }
+      message: "Failed to delete",
+    };
   }
 
   return {
     statusCode: 201,
-    message: "Task deleted"
-  }
-}
+    message: "Task deleted",
+  };
+};
 
-export const handler = middy(deleteHandler)
+export const handler = middy(deleteHandler).use(
+  parser({ schema: eventSchema })
+);
