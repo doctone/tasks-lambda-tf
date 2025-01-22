@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "This task manager app is built using a serverless archiecture with AWS lamda, Dynamo DB, Vite for React, and provisioned in terraform,",
   "packageManager": "npm@8.5.0",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "infra:deploy": "turbo deploy"
+  },
   "workspaces": [
     "frontend",
     "backend",
