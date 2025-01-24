@@ -1,38 +1,37 @@
-import { useQuery } from "@tanstack/react-query";
-import { TaskCard } from "../components/TaskCard";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getTasks } from "../api/getTasks";
 import { SetStateAction, useState } from "react";
 import { Button, Input } from "@chakra-ui/react";
 import { Plus, Trash2 } from "react-feather";
-
-type Todo = {
-  id: string;
-  title: string;
-  completed: boolean;
-};
+import { createTask } from "../api/upsertTask";
+import { Task } from "../api/types";
+import { useAuth } from "../auth/authContext";
 
 export function TaskList() {
   const { data } = useQuery({ queryKey: ["tasks"], queryFn: getTasks });
   console.log(data);
+  const { mutateAsync: create } = useMutation({ mutationFn: createTask });
 
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [newTodo, setNewTodo] = useState("");
+  const { user } = useAuth();
 
-  const addTodo = () => {
-    if (!newTodo.trim()) return;
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [newTask, setNewTask] = useState("");
 
-    const todo: Todo = {
+  const addTodo = async () => {
+    if (!newTask.trim()) return;
+
+    const task: Task = {
       id: Date.now().toString(),
-      title: newTodo,
-      completed: false,
+      title: newTask,
+      status: "todo",
     };
-
-    setTodos([todo, ...todos]);
-    setNewTodo("");
+    await create({ task, user: user?.displayName ?? "" });
+    setTasks([task, ...tasks]);
+    setNewTask("");
   };
 
   const deleteTodo = (id: string) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    setTasks(tasks.filter((todo) => todo.id !== id));
   };
 
   return (
@@ -42,9 +41,9 @@ export function TaskList() {
       <div className="flex gap-2 mb-6">
         <Input
           placeholder="Add a new task..."
-          value={newTodo}
+          value={newTask}
           onChange={(e: { target: { value: SetStateAction<string> } }) =>
-            setNewTodo(e.target.value)
+            setNewTask(e.target.value)
           }
           onKeyPress={(e: { key: string }) => e.key === "Enter" && addTodo()}
           className="flex-1"
@@ -55,14 +54,14 @@ export function TaskList() {
       </div>
 
       <div className="space-y-2">
-        {todos.map((todo) => (
+        {tasks.map((todo) => (
           <div
             key={todo.id}
             className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:border-slate-300"
           >
             <span
               className={`flex-1 ${
-                todo.completed
+                todo.status === "completed"
                   ? "line-through text-slate-500"
                   : "text-slate-900"
               }`}
@@ -83,20 +82,4 @@ export function TaskList() {
       </div>
     </div>
   );
-  const tasks = data?.data?.tasks ?? [];
-  if (tasks.length === 0) {
-    return (
-      <div>
-        <TaskCard task="finish benches" status="in progress" />
-        <TaskCard task="replace lounge drawers" status="completed" />
-        <TaskCard task="tidy garden" status="pending" />
-        <TaskCard task="remove island" status="not started" />
-        <TaskCard task="hall walls" status="in progress" />
-        <TaskCard task="finish benches" status="completed" />
-      </div>
-    );
-  }
-  return tasks.map((task) => (
-    <TaskCard key={task.sk} task={task.pk} status="completed" />
-  ));
 }

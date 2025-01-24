@@ -6,7 +6,7 @@ import {
   Box,
   TrendingUp,
 } from "react-feather";
-import MagicCard from "./components/MagicCard";
+import DashboardCard from "./components/DashboardCard";
 
 const sections = [
   {
@@ -85,7 +85,7 @@ function App() {
   return (
     <div className="flex justify-center flex-wrap text-slate-500 gap-2 m-5">
       {sections.map((section) => (
-        <MagicCard
+        <DashboardCard
           Icon={section.icon}
           title={section.title}
           iconColor={section.iconColor}
