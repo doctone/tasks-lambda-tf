@@ -31,6 +31,11 @@ export const upsertHandler = async (event: Task, _context: Context) => {
   }
   return {
     statusCode: 201,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Content-Type,Authorization",
+      "Access-Control-Allow-Methods": "OPTIONS,PUT",
+    },
     body: JSON.stringify({
       message: "Successfully created task",
       data: putResult.value,
@@ -40,6 +45,21 @@ export const upsertHandler = async (event: Task, _context: Context) => {
 
 export const handler = middy(upsertHandler)
   .use(injectLambdaContext(logger))
+  .use({
+    before: (handler) => {
+      if (handler.event.httpMethod === "OPTIONS") {
+        return {
+          statusCode: 200,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "Content-Type,Authorization",
+            "Access-Control-Allow-Methods": "OPTIONS,PUT",
+          },
+          body: "",
+        };
+      }
+    },
+  })
   .use(
     parser({
       schema: taskSchema,

@@ -38,8 +38,11 @@ resource "aws_apigatewayv2_api" "tasks" {
   name          = "serverless_lambda_gw"
   protocol_type = "HTTP"
   cors_configuration {
-    allow_methods = ["GET", "PUT"]
-    allow_origins = ["*"]
+    allow_methods  = ["GET", "PUT", "OPTIONS"]
+    allow_origins  = ["*"]
+    allow_headers  = ["Content-Type", "Authorization"]
+    expose_headers = ["Access-Control-Allow-Origin"]
+    max_age        = 300
   }
 }
 
@@ -145,6 +148,8 @@ module "create_route" {
   lambda_invoke_arn    = module.create_lambda.invoke_arn
   lambda_function_name = module.create_lambda.function_name
   route_key            = "PUT /create"
+  create_options_route = true
+
 }
 
 resource "aws_s3_bucket" "deployment_bucket" {

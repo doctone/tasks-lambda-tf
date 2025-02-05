@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --force",
-    "deploy": "aws s3 sync dist/ s3://www-task-manager-com",
+    "deploy-assets": "aws s3 sync dist/ s3://www-task-manager-com",
     "destroy": "aws s3 rm s3://www-task-manager-com --recursive",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
