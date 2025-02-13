@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/doctone/tasks-lambda-tf/issues"
   },
-  "homepage": "https://github.com/doctone/tasks-lambda-tf#readme"
+  "homepage": "https://github.com/doctone/tasks-lambda-tf#readme",
+  "dependencies": {
+    "@clerk/clerk-react": "^5.22.13"
+  }
 }

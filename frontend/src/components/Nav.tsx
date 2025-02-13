@@ -1,3 +1,9 @@
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from "@clerk/clerk-react";
 import { Home } from "react-feather";
 import { Link } from "react-router";
 
@@ -28,6 +34,12 @@ export function Nav() {
       </div>
       <Link to="/">
         <div className="flex items-center gap-3">
+          <SignedOut>
+            <SignInButton />
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
           <Home />
         </div>
       </Link>
