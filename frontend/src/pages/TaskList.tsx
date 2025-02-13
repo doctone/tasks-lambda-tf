@@ -2,7 +2,6 @@ import { useMutation } from "@tanstack/react-query";
 import { Button, Input } from "@chakra-ui/react";
 import { Plus, Trash2 } from "react-feather";
 import { createTask } from "../api/upsertTask";
-import { useAuth } from "../auth/authContext";
 import { useTasks } from "./useTasks";
 import { Form, useForm } from "react-hook-form";
 
@@ -10,8 +9,7 @@ export function TaskList() {
   const { data } = useTasks();
 
   const { mutateAsync: create } = useMutation({ mutationFn: createTask });
-
-  const { user } = useAuth();
+  const user = { displayName: "placeholder" };
   const form = useForm<{ title: string }>();
 
   const onSubmit = async (data: { title: string }) => {
